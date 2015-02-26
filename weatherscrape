@@ -1,0 +1,70 @@
+#!/usr/bin/ruby
+
+require "rubygems"
+require "nokogiri"
+require "open-uri"
+require "colorize"
+
+
+cities = {
+	"Florham Park" => "07932",
+	"Binghamton" => "13850",
+	"New York" => "10028",
+	"Miami" => "33152",
+	"Chicago" => "60607",
+	"Houston" => "77201",
+	"San Diego" => "92199",
+	"Kansas City" => "66106",
+	"Denver" => "80202",
+	"Anchorage" => "99599",
+	"Washington DC" => "20090",
+	"Richmond" => "94801",
+	"Atlanta" => "30304",
+	"Pittsburgh" => "15290",
+	"Syracuse" => "13220",
+	"Boston" => "02205",
+	"Salt Lake City" => "84199",
+	"Albuquerque" => "87101",
+	"Las Vegas" => "89199",
+	"Memphis" => "38101",
+	"Los Angeles" => "90052",
+	"Seattle" => "98108",
+	"San Francisco" => "94188",
+	"Honolulu" => "96801",
+
+
+}
+
+
+
+
+def temp_to_color(temp)
+	case
+		when temp >= 80
+			"red"
+		when temp > 66
+			"yellow"
+		when temp > 49
+			"green"
+		when temp > 32
+			"cyan"
+		when temp > 15
+			"blue"
+		else
+			"magenta" 	
+	end
+end
+
+cities.each do |city, zip|
+
+	url = "https://www.google.com/search?q=weather+#{zip}"
+	page = Nokogiri::HTML(open(url))
+	current_temp = page.css(".wob_t").first.text[0..-3]
+
+
+	color = temp_to_color(current_temp.to_i)
+	puts "#{city}".public_send(color) + " #{current_temp}".public_send(color)
+
+end
+
+
